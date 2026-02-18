@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>P2P Data Sharing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{
+  font-family: Arial;
+  text-align:center;
+  background:#f4f4f4;
+}
+input,button{
+  padding:10px;
+  margin:8px;
+}
+button{
+  background:blue;
+  color:white;
+  border:none;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Peer-to-Peer Mobile Data Sharing</h2>
+
+<h3>Register User</h3>
+<input id="email" placeholder="Enter Email">
+<button onclick="register()">Register</button>
+
+<h3>Transfer Data</h3>
+<input id="sender" placeholder="Sender Email"><br>
+<input id="receiver" placeholder="Receiver Email"><br>
+<input id="amount" placeholder="Amount (MB)"><br>
+<button onclick="transfer()">Transfer</button>
+
+<h3>Check Balance</h3>
+<input id="check" placeholder="Email">
+<button onclick="checkBalance()">Check</button>
+
+<p id="msg"></p>
+
+<script>
+
+let users = {};
+
+function register(){
+  let email = document.getElementById("email").value;
+
+  if(users[email]){
+    document.getElementById("msg").innerText="User already exists";
+  } else {
+    users[email] = {balance:1000};
+    document.getElementById("msg").innerText="Registered successfully with 1000MB";
+  }
+}
+
+function transfer(){
+  let sender = document.getElementById("sender").value;
+  let receiver = document.getElementById("receiver").value;
+  let amount = parseInt(document.getElementById("amount").value);
+
+  if(!users[sender] || !users[receiver]){
+    document.getElementById("msg").innerText="User not found";
+    return;
+  }
+
+  if(users[sender].balance < amount){
+    document.getElementById("msg").innerText="Insufficient balance";
+    return;
+  }
+
+  users[sender].balance -= amount;
+  users[receiver].balance += amount;
+
+  document.getElementById("msg").innerText="Transfer successful";
+}
+
+function checkBalance(){
+  let email = document.getElementById("check").value;
+
+  if(!users[email]){
+    document.getElementById("msg").innerText="User not found";
+  } else {
+    document.getElementById("msg").innerText=
+    "Balance: "+users[email].balance+" MB";
+  }
+}
+
+</script>
+
+</body>
+</html>
